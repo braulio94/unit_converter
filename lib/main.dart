@@ -42,8 +42,27 @@ class CategoryRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        centerTitle: true,
+        title: Text('Unit Converter', style: Theme.of(context).textTheme.display1),
+        backgroundColor: Colors.green[100],
+      ),
+      body: Container(
+        color: Colors.green[100],
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        child: ListView.builder(
+          itemCount: _categoryNames.length,
+          itemBuilder: (context, index){
+            return Category(
+              name: _categoryNames[index],
+              color: _baseColors[index],
+              iconLocation: Icons.cake,
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -10,16 +10,40 @@ class UnitConverterApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
-      home: Scaffold(
-        backgroundColor: Colors.green[100],
-        body: Center(
-          child: Category(
-            name: 'Cake',
-            color: Colors.green,
-            iconLocation: Icons.cake,
-          ),
-        ),
-      ),
+      home: CategoryRoute(),
+    );
+  }
+}
+
+class CategoryRoute extends StatelessWidget {
+
+  static const List<String> _categoryNames = [
+    'Length',
+    'Area',
+    'Volume',
+    'Mass',
+    'Time',
+    'Degital Storage',
+    'Energy',
+    'Currency',
+  ];
+
+  static const List<Color> _baseColors = [
+    Colors.teal,
+    Colors.orange,
+    Colors.pinkAccent,
+    Colors.blueAccent,
+    Colors.yellow,
+    Colors.yellow,
+    Colors.greenAccent,
+    Colors.purpleAccent,
+    Colors.red,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+
     );
   }
 }

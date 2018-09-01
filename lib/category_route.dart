@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unit_converter/category.dart';
+import 'package:unit_converter/unit.dart';
 
 class CategoryRoute extends StatelessWidget {
 
@@ -45,6 +46,13 @@ class CategoryRoute extends StatelessWidget {
               name: _categoryNames[index],
               color: _baseColors[index],
               iconLocation: Icons.cake,
+              units: List.generate(10, (int i){
+                i += 1;
+                return Unit(
+                  name: '${_categoryNames[index]} Unit $i',
+                  conversion: i.toDouble(),
+                );
+              }),
             );
           },
         ),

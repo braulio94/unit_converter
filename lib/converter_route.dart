@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter/category.dart';
 import 'package:unit_converter/unit.dart';
 
-class ConverterRoute extends StatefulWidget {
-  final name;
-  final Color color;
-  final List<Unit> units;
+class UnitConverter extends StatefulWidget {
+  final Category category;
 
-  ConverterRoute({this.name, this.color, this.units});
+  UnitConverter({this.category});
 
   @override
   _ConverterRouteState createState() => _ConverterRouteState();
 }
 
-class _ConverterRouteState extends State<ConverterRoute> {
+class _ConverterRouteState extends State<UnitConverter> {
 
   Unit _fromValue;
   Unit _toValue;
@@ -28,9 +27,19 @@ class _ConverterRouteState extends State<ConverterRoute> {
     _setDefaults();
   }
 
+
+  @override
+  void didUpdateWidget(UnitConverter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.category != widget.category){
+      _createDropdownMenuItems();
+      _setDefaults();
+    }
+  }
+
   void _createDropdownMenuItems(){
     var newItems = <DropdownMenuItem>[];
-    for(var unit in widget.units){
+    for(var unit in widget.category.units){
       newItems.add(
         DropdownMenuItem(
           value: unit.name,
@@ -47,8 +56,8 @@ class _ConverterRouteState extends State<ConverterRoute> {
 
   void _setDefaults(){
     setState(() {
-      _fromValue = widget.units[0];
-      _toValue = widget.units[1];
+      _fromValue = widget.category.units[0];
+      _toValue = widget.category.units[1];
     });
   }
 
@@ -98,7 +107,7 @@ class _ConverterRouteState extends State<ConverterRoute> {
   }
 
   Unit _getUnit(String unitName){
-    return widget.units.firstWhere(
+    return widget.category.units.firstWhere(
         (Unit unit){
           return unit.name == unitName;
         },

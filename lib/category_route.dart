@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter/backdrop.dart';
 import 'package:unit_converter/category.dart';
+import 'package:unit_converter/category_tile.dart';
+import 'package:unit_converter/converter_route.dart';
 import 'package:unit_converter/unit.dart';
 
-class CategoryRoute extends StatelessWidget {
+class CategoryRoute extends StatefulWidget {
+  @override
+  _CategoryRouteState createState() => _CategoryRouteState();
+}
+
+class _CategoryRouteState extends State<CategoryRoute> {
 
   static const List<String> _categoryNames = [
     'Length',
@@ -27,36 +35,65 @@ class CategoryRoute extends StatelessWidget {
     Colors.red,
   ];
 
+
+  @override
+  void initState() {
+    super.initState();
+    for(int i = 0; i < _categoryNames.length; i++){
+      var category = Category(
+        name: _categoryNames[i],
+        color: _baseColors[i],
+        iconLocation: Icons.cake,
+        units: List.generate(10, (int u) {
+          u += 1;
+          return Unit(
+            name: '${_categoryNames[i]} Unit $u',
+            conversion: u.toDouble(),
+          );
+        }),
+      );
+      if(i == 0){
+        _defaultCategory = category;
+      } else {
+        _categories.add(category);
+      }
+    }
+  }
+
+  Category _defaultCategory;
+  Category _currentCategory;
+  final _categories = <Category>[];
+
+  void _onCategoryTap(Category category) {
+    setState(() {
+      _currentCategory = category;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text('Unit Converter', style: Theme.of(context).textTheme.display1),
-        backgroundColor: Colors.green[100],
-      ),
-      body: Container(
-        color: Colors.green[100],
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: ListView.builder(
-          itemCount: _categoryNames.length,
-          itemBuilder: (context, index){
-            return Category(
-              name: _categoryNames[index],
-              color: _baseColors[index],
-              iconLocation: Icons.cake,
-              units: List.generate(10, (int i){
-                i += 1;
-                return Unit(
-                  name: '${_categoryNames[index]} Unit $i',
-                  conversion: i.toDouble(),
-                );
-              }),
-            );
-          },
+      body: Backdrop(
+        currentCategory: _currentCategory == null ? _defaultCategory : _currentCategory,
+        frontPanel: _currentCategory == null? UnitConverter(category: _defaultCategory) : UnitConverter(category: _currentCategory),
+        frontTitle: Text('Unit Converter'),
+        backTitle: Text('Select a category'),
+        backPanel: Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 48.0),
+          child: ListView.builder(
+            itemCount: _categories.length,
+            itemBuilder: (context, index){
+              return CategoryTile(
+                category: _categories[index],
+                onTap: _onCategoryTap,
+              );
+            },
+          ),
         ),
       ),
+      resizeToAvoidBottomPadding: true,
     );
   }
+
+
 }
